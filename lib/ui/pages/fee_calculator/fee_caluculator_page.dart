@@ -16,6 +16,7 @@ class MainApp extends ConsumerWidget {
     return Scaffold(
       body: SafeArea(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
               padding: const EdgeInsets.all(32.0),
@@ -74,15 +75,15 @@ class MainApp extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '販売合計⾦額:${getTotalSalesAmount()}',
+                        '販売合計⾦額: ${ref.watch(feeCalculatorProviderProvider.notifier).calcTotalSalesAmount(entryFee)}',
                         style: Theme.of(context).textTheme.headlineSmall,
                       ),
                       Text(
-                        '⾦額変更前合計⾦額: ${getTotalAmountBeforeAdjustment()}',
+                        '⾦額変更前合計⾦額: ${ref.watch(feeCalculatorProviderProvider.notifier).calcTotalAmountBeforeAdjustmentMap(entryFee)}',
                         style: Theme.of(context).textTheme.headlineSmall,
                       ),
                       Text(
-                        '⾦額変更明細${ref.watch(feeCalculatorProviderProvider.select((e) => e.seniorCount))}',
+                        '⾦額変更明細${ref.watch(feeCalculatorProviderProvider.notifier).getAdjustmentDetails()}',
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ],
@@ -98,10 +99,6 @@ class MainApp extends ConsumerWidget {
       ),
     );
   }
-
-  int getTotalSalesAmount() => 1000;
-  int getTotalAmountBeforeAdjustment() => 1000;
-  String getAdjustmentDetails() => '明細';
 }
 
 class _InputNumberOfPeopleTile extends ConsumerWidget {
