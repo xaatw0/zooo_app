@@ -22,4 +22,12 @@ class HolidaySurcharge extends PriceDeterminingProcess {
       '${value.details}休⽇料⾦適応,',
     );
   }
+
+  @override
+  String get label => '休⽇料⾦';
+
+  @override
+  int resolvePrice2(int price) {
+    return price + 200;
+  }
 }

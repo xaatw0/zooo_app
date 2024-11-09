@@ -22,7 +22,7 @@ class MainApp extends ConsumerWidget {
               padding: const EdgeInsets.all(32.0),
               child: Center(
                 child: CircleAvatar(
-                  radius: 128,
+                  radius: 96,
                   backgroundImage: AssetImage(Assets.images.zoooLogo.path),
                 ),
               ),
@@ -55,7 +55,7 @@ class MainApp extends ConsumerWidget {
                 ageGroup: AgeGroup.senior,
                 text:
                     'シニア: ${ref.watch(feeCalculatorProviderProvider.select((e) => e.seniorCount))}名'),
-            const SizedBox(height: 32),
+            const SizedBox(height: 16),
             SegmentedButton<FeeType>(
               segments: FeeType.values
                   .map((e) => ButtonSegment(value: e, label: Text(e.name)))
@@ -83,7 +83,7 @@ class MainApp extends ConsumerWidget {
                         style: Theme.of(context).textTheme.headlineSmall,
                       ),
                       Text(
-                        '⾦額変更明細${ref.watch(feeCalculatorProviderProvider.notifier).getAdjustmentDetails()}',
+                        '⾦額変更明細: ${ref.watch(feeCalculatorProviderProvider.notifier).getAdjustmentDetails()}',
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ],

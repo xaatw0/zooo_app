@@ -14,19 +14,33 @@ class FeeCalculatorLogic {
   }
 
   int calcTotalAmount(
-    EntryFee entryFee,
+    EntryFee fees,
     DateTime currentTime,
     int adultCount,
     int childCount,
     int seniorCount,
   ) {
-    final PriceDeterminingProcess process =
+    final PriceDeterminingProcess processor =
         GroupDiscount(adultCount + seniorCount, childCount);
-    process
+    processor
         .setNext(EveningDiscount(currentTime))
         .setNext(HolidaySurcharge(currentTime))
         .setNext(DayOfWeekDiscount(currentTime));
 
-    return 0;
+    return processor.proceedPrice(fees.adult) * adultCount +
+        processor.proceedPrice(fees.child) * childCount +
+        processor.proceedPrice(fees.senior) * seniorCount;
+  }
+
+  String getAdjustmentDetails(
+      DateTime currentTime, int adultCount, int childCount, int seniorCount) {
+    final PriceDeterminingProcess processor =
+        GroupDiscount(adultCount + seniorCount, childCount);
+    processor
+        .setNext(EveningDiscount(currentTime))
+        .setNext(HolidaySurcharge(currentTime))
+        .setNext(DayOfWeekDiscount(currentTime));
+    final result = processor.proceedDetail('');
+    return result.isEmpty ? '適応なし' : result.substring(0, result.length - 1);
   }
 }

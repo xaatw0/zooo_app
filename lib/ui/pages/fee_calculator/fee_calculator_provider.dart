@@ -92,5 +92,10 @@ class FeeCalculatorProvider extends _$FeeCalculatorProvider {
     );
   }
 
-  String getAdjustmentDetails() => '明細';
+  String getAdjustmentDetails() => _logic.getAdjustmentDetails(
+        state.currentTime,
+        state.adultCount,
+        state.childCount,
+        state.seniorCount,
+      );
 }

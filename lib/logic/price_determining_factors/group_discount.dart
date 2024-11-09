@@ -21,4 +21,12 @@ class GroupDiscount extends PriceDeterminingProcess {
     return AdjustmentPriceAndDetails(
         (value.price * 0.9).floor(), '${value.details}団体割引適応,');
   }
+
+  @override
+  String get label => '団体割引';
+
+  @override
+  int resolvePrice2(int price) {
+    return (price * 0.9).floor();
+  }
 }

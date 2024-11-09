@@ -22,4 +22,12 @@ class DayOfWeekDiscount extends PriceDeterminingProcess {
       '${value.details}⽉⽔割引適応,',
     );
   }
+
+  @override
+  int resolvePrice2(int price) {
+    return price - 100;
+  }
+
+  @override
+  String get label => '⽉⽔割引';
 }

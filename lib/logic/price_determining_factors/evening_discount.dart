@@ -21,4 +21,12 @@ class EveningDiscount extends PriceDeterminingProcess {
       '${value.details}夕方料金適応,',
     );
   }
+
+  @override
+  String get label => '夕方料金';
+
+  @override
+  int resolvePrice2(int price) {
+    return price - 100;
+  }
 }
