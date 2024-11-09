@@ -46,6 +46,12 @@ void main() {
   });
 
   group('resolvePrice', () {
+    test('割引・割り増し', () {
+      expect(
+        GroupDiscount(8, 4).resolvePrice2(100),
+        90,
+      );
+    });
     test('単体割引', () {
       final groupDiscount = GroupDiscount(8, 4);
       final result =

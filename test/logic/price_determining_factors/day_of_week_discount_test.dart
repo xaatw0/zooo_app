@@ -19,6 +19,10 @@ void main() {
   });
 
   group('resolvePrice', () {
+    test('割引・割り増し', () {
+      expect(DayOfWeekDiscount(DateTime(2024, 1, 3)).resolvePrice2(500), 400);
+    });
+
     test('単独割引', () {
       final resultWednesday = DayOfWeekDiscount(DateTime(2024, 1, 3))
           .resolvePrice(const AdjustmentPriceAndDetails(500, ''));

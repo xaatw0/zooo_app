@@ -23,6 +23,17 @@ void main() {
   });
 
   group('HolidaySurcharge - resolvePrice', () {
+    test('割引・割り増し', () {
+      expect(
+        HolidaySurcharge(DateTime(2024, 1, 6)).resolvePrice2(500),
+        700,
+      );
+
+      expect(
+        HolidaySurcharge(DateTime(2024, 1, 6)).resolvePrice2(400),
+        600,
+      );
+    });
     test('should add 200 to price and append details on holiday', () {
       final result = HolidaySurcharge(DateTime(2024, 1, 6)) // Saturday
           .resolvePrice(const AdjustmentPriceAndDetails(500, ''));

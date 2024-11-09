@@ -28,6 +28,12 @@ void main() {
     );
   });
   group('resolvePrice', () {
+    test('割引・割り増し', () {
+      expect(
+        EveningDiscount(DateTime(2024, 1, 1, 17, 0, 0)).resolvePrice2(500),
+        400,
+      );
+    });
     test('単体割引', () {
       final result = EveningDiscount(DateTime(2024, 1, 1, 17, 0, 0))
           .resolvePrice(const AdjustmentPriceAndDetails(500, ''));
