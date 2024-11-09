@@ -1,3 +1,4 @@
+/// 各種割引・割り増し処理のベースクラス。Chain of Responsibility パターンを使用
 abstract class PriceDeterminingProcess {
   PriceDeterminingProcess? nextProcess;
 

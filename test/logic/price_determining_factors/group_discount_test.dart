@@ -52,20 +52,4 @@ void main() {
       );
     });
   });
-
-  group('proceed', () {
-    /*
-    test('isAvailableが有効のため、割引あり', () {
-      final result =
-          GroupDiscount(8, 4).proceed(const AdjustmentPriceAndDetails(100, ''));
-      expect(result.price, equals(90));
-      expect(result.details, equals('団体割引適応,'));
-    });
-    test('isAvailableが無効のため、割引なし', () {
-      final result =
-          GroupDiscount(0, 0).proceed(const AdjustmentPriceAndDetails(100, ''));
-      expect(result.price, equals(100));
-      expect(result.details, equals(''));
-    });*/
-  });
 }
