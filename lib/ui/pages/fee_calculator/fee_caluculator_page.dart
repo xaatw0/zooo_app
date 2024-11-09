@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:zooo_app/gen/assets.gen.dart';
 import 'package:zooo_app/logic/entry_fee.dart';
+import 'package:zooo_app/ui/pages/fee_calculator/entry_fee_loader.dart';
 import 'package:zooo_app/ui/pages/fee_calculator/fee_calculator_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -54,18 +55,39 @@ class MainApp extends ConsumerWidget {
                 text:
                     'シニア: ${ref.watch(feeCalculatorProviderProvider.select((e) => e.seniorCount))}名'),
             const SizedBox(height: 32),
-            Text(
-              '販売合計⾦額:',
-              style: Theme.of(context).textTheme.headlineSmall,
+            SegmentedButton<FeeType>(
+              segments: FeeType.values
+                  .map((e) => ButtonSegment(value: e, label: Text(e.name)))
+                  .toList(),
+              selected: {
+                ref.watch(
+                    feeCalculatorProviderProvider.select((e) => e.feeType))
+              },
+              onSelectionChanged: (value) => ref
+                  .read(feeCalculatorProviderProvider.notifier)
+                  .changeFeeType(value.first),
             ),
-            Text(
-              '⾦額変更前合計⾦額:',
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
-            Text(
-              '⾦額変更明細',
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
+            ref.watch(loadEntryFeeProvider).when(
+                  error: (error, st) => Text(error.toString()),
+                  loading: () => const CircularProgressIndicator(),
+                  data: (entryFee) => Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '販売合計⾦額:${getTotalSalesAmount()}',
+                        style: Theme.of(context).textTheme.headlineSmall,
+                      ),
+                      Text(
+                        '⾦額変更前合計⾦額: ${getTotalAmountBeforeAdjustment()}',
+                        style: Theme.of(context).textTheme.headlineSmall,
+                      ),
+                      Text(
+                        '⾦額変更明細${ref.watch(feeCalculatorProviderProvider.select((e) => e.seniorCount))}',
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    ],
+                  ),
+                ),
           ],
         ),
       ),
@@ -76,6 +98,10 @@ class MainApp extends ConsumerWidget {
       ),
     );
   }
+
+  int getTotalSalesAmount() => 1000;
+  int getTotalAmountBeforeAdjustment() => 1000;
+  String getAdjustmentDetails() => '明細';
 }
 
 class _InputNumberOfPeopleTile extends ConsumerWidget {

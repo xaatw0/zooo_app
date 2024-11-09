@@ -65,4 +65,8 @@ class FeeCalculatorProvider extends _$FeeCalculatorProvider {
       );
     }
   }
+
+  void changeFeeType(FeeType? feeType) {
+    state = state.copyWith(feeType: feeType);
+  }
 }
