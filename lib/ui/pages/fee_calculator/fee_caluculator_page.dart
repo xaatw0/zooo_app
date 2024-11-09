@@ -7,97 +7,101 @@ import 'package:zooo_app/ui/pages/fee_calculator/entry_fee_loader.dart';
 import 'package:zooo_app/ui/pages/fee_calculator/fee_calculator_provider.dart';
 
 /// チケット販売オペレーター⽤⾦額計算プログラムの画面
-class MainApp extends ConsumerWidget {
-  const MainApp({super.key});
+class FeeCalculatorPage extends ConsumerWidget {
+  const FeeCalculatorPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(32.0),
-              child: Center(
-                child: CircleAvatar(
-                  radius: 96,
-                  backgroundImage: AssetImage(Assets.images.zoooLogo.path),
-                ),
+    return SafeArea(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Center(
+              child: CircleAvatar(
+                radius: 80,
+                backgroundImage: AssetImage(Assets.images.zoooLogo.path),
               ),
             ),
-            Row(
-              children: [
-                Text(
-                  '現在日時:'
-                  '${DateFormat.yMEd().format(ref.watch(feeCalculatorProviderProvider.select((e) => e.currentTime)))}'
-                  ' ${DateFormat.Hm().format(ref.watch(feeCalculatorProviderProvider.select((e) => e.currentTime)))}',
-                  style: Theme.of(context).textTheme.headlineSmall,
+          ),
+          Row(
+            children: [
+              Text(
+                '現在日時:'
+                '${DateFormat.yMEd().format(ref.watch(feeCalculatorProviderProvider.select((e) => e.currentTime)))}'
+                ' ${DateFormat.Hm().format(ref.watch(feeCalculatorProviderProvider.select((e) => e.currentTime)))}',
+                style: Theme.of(context).textTheme.headlineSmall,
+              ),
+              IconButton(
+                  iconSize: 32,
+                  onPressed: () => ref
+                      .read(feeCalculatorProviderProvider.notifier)
+                      .selectDateTime(context),
+                  icon: const Icon(Icons.edit))
+            ],
+          ),
+          _InputNumberOfPeopleTile(
+              key: const ObjectKey(AgeGroup.adult),
+              ageGroup: AgeGroup.adult,
+              text:
+                  '大人　: ${ref.watch(feeCalculatorProviderProvider.select((e) => e.adultCount))}名'),
+          _InputNumberOfPeopleTile(
+              key: const ObjectKey(AgeGroup.child),
+              ageGroup: AgeGroup.child,
+              text:
+                  '子供　: ${ref.watch(feeCalculatorProviderProvider.select((e) => e.childCount))}名'),
+          _InputNumberOfPeopleTile(
+              key: const ObjectKey(AgeGroup.senior),
+              ageGroup: AgeGroup.senior,
+              text:
+                  'シニア: ${ref.watch(feeCalculatorProviderProvider.select((e) => e.seniorCount))}名'),
+          const SizedBox(height: 8),
+          SegmentedButton<FeeType>(
+            segments: FeeType.values
+                .map((e) => ButtonSegment(value: e, label: Text(e.label)))
+                .toList(),
+            selected: {
+              ref.watch(feeCalculatorProviderProvider.select((e) => e.feeType))
+            },
+            onSelectionChanged: (value) => ref
+                .read(feeCalculatorProviderProvider.notifier)
+                .changeFeeType(value.first),
+          ),
+          ref.watch(loadEntryFeeProvider).when(
+                error: (error, st) => Text(error.toString()),
+                loading: () => const CircularProgressIndicator(),
+                data: (entryFee) => Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '販売合計⾦額: ${ref.watch(feeCalculatorProviderProvider.notifier).calcTotalSalesAmount(entryFee)}',
+                      style: Theme.of(context).textTheme.headlineSmall,
+                    ),
+                    Text(
+                      '⾦額変更前合計⾦額: ${ref.watch(feeCalculatorProviderProvider.notifier).calcTotalAmountBeforeAdjustmentMap(entryFee)}',
+                      style: Theme.of(context).textTheme.headlineSmall,
+                    ),
+                    Text(
+                      '⾦額変更明細: ${ref.watch(feeCalculatorProviderProvider.notifier).getAdjustmentDetails()}',
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                  ],
                 ),
-                IconButton(
-                    iconSize: 32,
-                    onPressed: () => ref
-                        .read(feeCalculatorProviderProvider.notifier)
-                        .selectDateTime(context),
-                    icon: const Icon(Icons.edit))
-              ],
+              ),
+          const Spacer(),
+          Align(
+            alignment: Alignment.bottomRight,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: FloatingActionButton(
+                onPressed: () =>
+                    ref.read(feeCalculatorProviderProvider.notifier).reset(),
+                child: const Icon(Icons.refresh),
+              ),
             ),
-            _InputNumberOfPeopleTile(
-                key: const ObjectKey(AgeGroup.adult),
-                ageGroup: AgeGroup.adult,
-                text:
-                    '大人　: ${ref.watch(feeCalculatorProviderProvider.select((e) => e.adultCount))}名'),
-            _InputNumberOfPeopleTile(
-                key: const ObjectKey(AgeGroup.child),
-                ageGroup: AgeGroup.child,
-                text:
-                    '子供　: ${ref.watch(feeCalculatorProviderProvider.select((e) => e.childCount))}名'),
-            _InputNumberOfPeopleTile(
-                key: const ObjectKey(AgeGroup.senior),
-                ageGroup: AgeGroup.senior,
-                text:
-                    'シニア: ${ref.watch(feeCalculatorProviderProvider.select((e) => e.seniorCount))}名'),
-            const SizedBox(height: 16),
-            SegmentedButton<FeeType>(
-              segments: FeeType.values
-                  .map((e) => ButtonSegment(value: e, label: Text(e.label)))
-                  .toList(),
-              selected: {
-                ref.watch(
-                    feeCalculatorProviderProvider.select((e) => e.feeType))
-              },
-              onSelectionChanged: (value) => ref
-                  .read(feeCalculatorProviderProvider.notifier)
-                  .changeFeeType(value.first),
-            ),
-            ref.watch(loadEntryFeeProvider).when(
-                  error: (error, st) => Text(error.toString()),
-                  loading: () => const CircularProgressIndicator(),
-                  data: (entryFee) => Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '販売合計⾦額: ${ref.watch(feeCalculatorProviderProvider.notifier).calcTotalSalesAmount(entryFee)}',
-                        style: Theme.of(context).textTheme.headlineSmall,
-                      ),
-                      Text(
-                        '⾦額変更前合計⾦額: ${ref.watch(feeCalculatorProviderProvider.notifier).calcTotalAmountBeforeAdjustmentMap(entryFee)}',
-                        style: Theme.of(context).textTheme.headlineSmall,
-                      ),
-                      Text(
-                        '⾦額変更明細: ${ref.watch(feeCalculatorProviderProvider.notifier).getAdjustmentDetails()}',
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                    ],
-                  ),
-                ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () =>
-            ref.read(feeCalculatorProviderProvider.notifier).reset(),
-        child: const Icon(Icons.refresh),
+          )
+        ],
       ),
     );
   }
