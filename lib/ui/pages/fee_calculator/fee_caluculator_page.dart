@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:zooo_app/gen/assets.gen.dart';
 import 'package:zooo_app/logic/entry_fee.dart';
 import 'package:zooo_app/ui/pages/fee_calculator/fee_calculator_provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 /// チケット販売オペレーター⽤⾦額計算プログラムの画面
 class MainApp extends ConsumerWidget {
@@ -10,53 +12,67 @@ class MainApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return MaterialApp(
-      home: Scaffold(
-        body: SafeArea(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(32.0),
-                child: Center(
-                  child: CircleAvatar(
-                    radius: 128,
-                    backgroundImage: AssetImage(Assets.images.zoooLogo.path),
-                  ),
+    return Scaffold(
+      body: SafeArea(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(32.0),
+              child: Center(
+                child: CircleAvatar(
+                  radius: 128,
+                  backgroundImage: AssetImage(Assets.images.zoooLogo.path),
                 ),
               ),
-              _InputNumberOfPeopleTile(
-                  ageGroup: AgeGroup.adult,
-                  text:
-                      '大人　: ${ref.watch(feeCalculatorProviderProvider.select((e) => e.adultCount))}名'),
-              _InputNumberOfPeopleTile(
-                  ageGroup: AgeGroup.child,
-                  text:
-                      '子供　: ${ref.watch(feeCalculatorProviderProvider.select((e) => e.childCount))}名'),
-              _InputNumberOfPeopleTile(
-                  ageGroup: AgeGroup.senior,
-                  text:
-                      'シニア: ${ref.watch(feeCalculatorProviderProvider.select((e) => e.seniorCount))}名'),
-              const SizedBox(height: 32),
-              Text(
-                '販売合計⾦額:',
-                style: Theme.of(context).textTheme.headlineSmall,
-              ),
-              Text(
-                '⾦額変更前合計⾦額:',
-                style: Theme.of(context).textTheme.headlineSmall,
-              ),
-              Text(
-                '⾦額変更明細',
-                style: Theme.of(context).textTheme.headlineSmall,
-              ),
-            ],
-          ),
+            ),
+            Row(
+              children: [
+                Text(
+                  '現在日時:'
+                  '${DateFormat.yMEd().format(ref.watch(feeCalculatorProviderProvider.select((e) => e.currentTime)))}'
+                  ' ${DateFormat.Hm().format(ref.watch(feeCalculatorProviderProvider.select((e) => e.currentTime)))}',
+                  style: Theme.of(context).textTheme.headlineSmall,
+                ),
+                IconButton(
+                    iconSize: 32,
+                    onPressed: () => ref
+                        .read(feeCalculatorProviderProvider.notifier)
+                        .selectDateTime(context),
+                    icon: const Icon(Icons.edit))
+              ],
+            ),
+            _InputNumberOfPeopleTile(
+                ageGroup: AgeGroup.adult,
+                text:
+                    '大人　: ${ref.watch(feeCalculatorProviderProvider.select((e) => e.adultCount))}名'),
+            _InputNumberOfPeopleTile(
+                ageGroup: AgeGroup.child,
+                text:
+                    '子供　: ${ref.watch(feeCalculatorProviderProvider.select((e) => e.childCount))}名'),
+            _InputNumberOfPeopleTile(
+                ageGroup: AgeGroup.senior,
+                text:
+                    'シニア: ${ref.watch(feeCalculatorProviderProvider.select((e) => e.seniorCount))}名'),
+            const SizedBox(height: 32),
+            Text(
+              '販売合計⾦額:',
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
+            Text(
+              '⾦額変更前合計⾦額:',
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
+            Text(
+              '⾦額変更明細',
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
+          ],
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () =>
-              ref.read(feeCalculatorProviderProvider.notifier).reset(),
-          child: const Icon(Icons.refresh),
-        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () =>
+            ref.read(feeCalculatorProviderProvider.notifier).reset(),
+        child: const Icon(Icons.refresh),
       ),
     );
   }

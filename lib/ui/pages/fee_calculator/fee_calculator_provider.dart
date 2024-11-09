@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:zooo_app/logic/entry_fee.dart';
 import 'package:zooo_app/ui/pages/fee_calculator/fee_calculator_model.dart';
@@ -42,4 +43,26 @@ class FeeCalculatorProvider extends _$FeeCalculatorProvider {
   }
 
   void reset() => state = FeeCalculatorModel.zero();
+
+  void selectDateTime(BuildContext context) async {
+    final DateTime? selectedDate = await showDatePicker(
+      context: context,
+      initialDate: state.currentTime,
+      firstDate: state.currentTime.subtract(const Duration(days: 30)),
+      lastDate: state.currentTime.add(const Duration(days: 30)),
+    );
+
+    if (selectedDate == null || !context.mounted) return null;
+    final TimeOfDay? selectedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.fromDateTime(state.currentTime),
+    );
+
+    if (selectedTime != null) {
+      state = state.copyWith(
+        currentTime: DateTime(selectedDate.year, selectedDate.month,
+            selectedDate.day, selectedTime.hour, selectedTime.minute),
+      );
+    }
+  }
 }
