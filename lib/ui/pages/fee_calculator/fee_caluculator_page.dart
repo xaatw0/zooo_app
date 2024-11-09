@@ -5,7 +5,6 @@ import 'package:zooo_app/gen/assets.gen.dart';
 import 'package:zooo_app/logic/entry_fee.dart';
 import 'package:zooo_app/ui/pages/fee_calculator/entry_fee_loader.dart';
 import 'package:zooo_app/ui/pages/fee_calculator/fee_calculator_provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 /// チケット販売オペレーター⽤⾦額計算プログラムの画面
 class MainApp extends ConsumerWidget {
@@ -44,14 +43,17 @@ class MainApp extends ConsumerWidget {
               ],
             ),
             _InputNumberOfPeopleTile(
+                key: const ObjectKey(AgeGroup.adult),
                 ageGroup: AgeGroup.adult,
                 text:
                     '大人　: ${ref.watch(feeCalculatorProviderProvider.select((e) => e.adultCount))}名'),
             _InputNumberOfPeopleTile(
+                key: const ObjectKey(AgeGroup.child),
                 ageGroup: AgeGroup.child,
                 text:
                     '子供　: ${ref.watch(feeCalculatorProviderProvider.select((e) => e.childCount))}名'),
             _InputNumberOfPeopleTile(
+                key: const ObjectKey(AgeGroup.senior),
                 ageGroup: AgeGroup.senior,
                 text:
                     'シニア: ${ref.watch(feeCalculatorProviderProvider.select((e) => e.seniorCount))}名'),

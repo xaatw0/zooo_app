@@ -1,5 +1,4 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:zooo_app/logic/price_determining_factors/adjustment_price_and_details.dart';
 import 'package:zooo_app/logic/price_determining_factors/evening_discount.dart';
 
 void main() {
@@ -30,21 +29,9 @@ void main() {
   group('resolvePrice', () {
     test('割引・割り増し', () {
       expect(
-        EveningDiscount(DateTime(2024, 1, 1, 17, 0, 0)).resolvePrice2(500),
+        EveningDiscount(DateTime(2024, 1, 1, 17, 0, 0)).resolvePrice(500),
         400,
       );
-    });
-    test('単体割引', () {
-      final result = EveningDiscount(DateTime(2024, 1, 1, 17, 0, 0))
-          .resolvePrice(const AdjustmentPriceAndDetails(500, ''));
-      expect(result.price, equals(400));
-      expect(result.details, '夕方料金適応,');
-    });
-    test('複数割引', () {
-      final result = EveningDiscount(DateTime(2024, 1, 1, 17, 0, 0))
-          .resolvePrice(const AdjustmentPriceAndDetails(400, 'ABC'));
-      expect(result.price, equals(300));
-      expect(result.details, 'ABC夕方料金適応,');
     });
   });
 }
