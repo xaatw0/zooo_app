@@ -9,6 +9,13 @@ enum FeeType {
   special;
 }
 
+/// 顧客区分
+enum AgeGroup {
+  adult,
+  child,
+  senior;
+}
+
 /// ⼊園チケットの1人あたりの料金一覧
 class EntryFee {
   final int adult;
