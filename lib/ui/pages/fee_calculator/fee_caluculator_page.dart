@@ -60,7 +60,7 @@ class MainApp extends ConsumerWidget {
             const SizedBox(height: 16),
             SegmentedButton<FeeType>(
               segments: FeeType.values
-                  .map((e) => ButtonSegment(value: e, label: Text(e.name)))
+                  .map((e) => ButtonSegment(value: e, label: Text(e.label)))
                   .toList(),
               selected: {
                 ref.watch(

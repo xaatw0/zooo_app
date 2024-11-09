@@ -3,10 +3,14 @@ import 'dart:convert';
 ///チケットの種類
 enum FeeType {
   /// 通常
-  normal,
+  normal('通常'),
 
   /// 特別
-  special;
+  special('特別');
+
+  const FeeType(this.label);
+
+  final String label;
 }
 
 /// 顧客区分
