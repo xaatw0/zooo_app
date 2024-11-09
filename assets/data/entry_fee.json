@@ -1,0 +1,14 @@
+{
+  "entryFees": {
+    "normal": {
+      "adult": 1000,
+      "child": 500,
+      "senior": 800
+    },
+    "special": {
+      "adult": 600,
+      "child": 400,
+      "senior": 500
+    }
+  }
+}
