@@ -41,3 +41,10 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Fvm
+.fvm/
+
+# 自動生成
+**/*.g.dart
+**/*.gen.dart
